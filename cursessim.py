@@ -10,14 +10,19 @@ current = ['                ',
 
 
 def update(line=0, text=''):
-    future[line] = sprintf('%16s', text)
+    future[line] = '{:^16}'.format(text.upper())
 
 def steps(win):
     for i in range(2):
         for j in range(16):
             if future[i][j] != current[i][j]:
-                current[i][j] = current[i][j] + 1
-                win.addch(i+1,j+1,current[i][j]
+                newch = chr(ord(current[i][j]) + 1)
+                if newch == '[':
+                    newch == ' '
+                tmp = list(current[i])
+                tmp[j] = newch
+                current[i] = ''.join(tmp)
+                win.addch(i+1,j+1,newch)
 
 def main(stdscr):
     stdscr.clear()
@@ -26,10 +31,13 @@ def main(stdscr):
     assert curses.COLS > 17
     win = curses.newwin(4, 18, 0, 0)
     win.box()
-    win.addstr(1, 1, 'hello world')
-    win.addch(2, 1, 'a')
-    win.refresh()
-    time.sleep(1)
+    #win.addstr(1, 1, 'hello world')
+    #win.addch(2, 1, 'a')
+    update(text='hello world')
+    for i in range(256):
+        steps(win)
+        win.refresh()
+        time.sleep(1)
     win.addch(2, 1, 'b')
     win.refresh()
     win.getkey()
