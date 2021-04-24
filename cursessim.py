@@ -1,15 +1,30 @@
 #!/usr/bin/env python3
 
+
 """Simulator of splitflap display using Curses"""
+
 
 import time
 import curses
+
 
 future =  ['                ',
            '                ']
 current = ['                ',
            '                ']
 
+
+def linestatus():
+    """Check to see if lines are up to date or still updating"""
+    overall = True
+    individ = []
+    for idx in range(len(current)):
+        if future[idx] == current[idx]:
+            individ.append(True)
+        else:
+            individ.append(False)
+            overall = False
+    return overall, individ
 
 def update(line=0, text=''):
     """Update display with a new string"""
@@ -28,32 +43,42 @@ def steps(win):
                 current[i] = ''.join(tmp)
                 win.addch(i+1, j+1, newch)
 
-def main(stdscr):
-    """Main curses function"""
+def gountilfinished(win):
+    """Step through flaps until display is accurate"""
+    while not linestatus()[0]:
+        steps(win)
+        win.refresh()
+        time.sleep(0.125)
+    win.refresh()
+
+def initscr(stdscr):
+    """Initiate screen and basic display"""
     stdscr.clear()
     curses.curs_set(False)
     assert curses.LINES > 3
     assert curses.COLS > 17
     win = curses.newwin(4, 18, 0, 0)
     win.box()
+    return win
+
+def addtotop(line, win):
+    """Add a line of text to the top of the screen
+    Moving down all lines beneath it one by one
+    """
+    for idx in reversed(range(len(future))):
+        if future[idx].strip() and idx != len(future):
+            future[idx + 1] = future[idx]
+            gountilfinished(win)
+    update(text=line)
+    gountilfinished(win)
+
+def main(stdscr):
+    """Main curses function"""
+    win = initscr(stdscr)
     update(text='hello world')
-    for _ in range(64):
-        steps(win)
-        win.refresh()
-        time.sleep(0.125)
-    win.refresh()
+    gountilfinished(win)
     win.getkey()
-    update(line=1, text='hello world')
-    for _ in range(64):
-        steps(win)
-        win.refresh()
-        time.sleep(0.125)
-    update(line=0, text='goodbye world')
-    for _ in range(64):
-        steps(win)
-        win.refresh()
-        time.sleep(0.125)
-    win.refresh()
+    addtotop('goodbye world', win)
     win.getkey()
 
 
