@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+ <title>My page title</title>
+ <script src="{{ url_for('static', filename='ticker-board.js') }}"></script>
+</head>
+<body>
+<div id="board"></div>
+<script>
+	const board = new Board(document.querySelector('#board'), {count: 6, size: 22, delay: 1})
+	
+	function formatMessages(messages) {
+		console.log(messages)
+		// TODO actually parse and use that
+		board.updateMessages(['HELLO', 'WORLD'])
+		// TODO set later reupdate
+	}
+
+	function getMessages() {
+		fetch('{{ url_for('render_board') }}').then((response) => response.json()).then((json) => formatMessages(json))
+	}
+
+	getMessages()
+		
+</script>
+
+</body>
+</html>
