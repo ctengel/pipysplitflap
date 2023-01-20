@@ -1,3 +1,4 @@
+import random
 from flask import Flask, render_template
 
 app = Flask(__name__)
@@ -8,6 +9,5 @@ def main():
 
 @app.route("/board")
 def render_board():
-    return {'messages': [{'text': 'HELLO'},
-                         {'text': 'WORLD'}]}
+    return {'messages': [{'text': random.choice(['HELLO', 'WORLD'])}]}
 

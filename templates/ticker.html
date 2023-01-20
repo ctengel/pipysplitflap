@@ -2,8 +2,8 @@
    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
- <title>My page title</title>
- <script src="{{ url_for('static', filename='ticker-board.js') }}"></script>
+ <title>Splitflap</title>
+ <script src="{{ url_for('static', filename='ticker-board.min.js') }}"></script>
 </head>
 <body>
 <div id="board"></div>
@@ -11,10 +11,9 @@
 	const board = new Board(document.querySelector('#board'), {count: 6, size: 22, delay: 1})
 	
 	function formatMessages(messages) {
-		console.log(messages)
-		// TODO actually parse and use that
-		board.updateMessages(['HELLO', 'WORLD'])
-		// TODO set later reupdate
+		let mymsgs = messages.messages.map(({ text }) => text);
+		board.updateMessages(mymsgs)
+		setTimeout(() => { getMessages(); }, 10000);
 	}
 
 	function getMessages() {
