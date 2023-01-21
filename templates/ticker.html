@@ -13,7 +13,7 @@
 	function formatMessages(messages) {
 		let mymsgs = messages.messages.map(({ text }) => text);
 		board.updateMessages(mymsgs)
-		setTimeout(() => { getMessages(); }, 60000);
+		setTimeout(() => { getMessages(); }, 300000);
 	}
 
 	function getMessages() {

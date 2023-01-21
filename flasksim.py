@@ -2,9 +2,12 @@ import random
 import xml.etree.ElementTree as ET
 from flask import Flask, render_template
 import requests
+import feedparser
 
 THRUWAY = True
 WEATHER = "NY"
+RSS = ['http://feeds.bbci.co.uk/news/rss.xml?edition=us',
+       'https://www.ncregister.com/feeds/general-news.xml']
 
 app = Flask(__name__)
 
@@ -23,6 +26,13 @@ def get_weather(state):
     events = {x['properties']['event'] for x in weather['features']}
     return [{'text': x.upper()} for x in events]
 
+def get_rss(urls):
+    feeds = [feedparser.parse(x) for x in urls]
+    entries = []
+    for feed in feeds:
+        for entry in feed.entries:
+            entries.append((entry.published_parsed, entry.title))
+    return [{'text': x[1].upper()} for x in sorted(entries, reverse=True)][:3]
 
 @app.route("/board")
 def render_board():
@@ -31,5 +41,7 @@ def render_board():
         messages = messages + get_thruway()
     if WEATHER:
         messages = messages + get_weather(WEATHER)
+    if RSS:
+        messages = messages + get_rss(RSS)
     return {'messages': messages}
 
