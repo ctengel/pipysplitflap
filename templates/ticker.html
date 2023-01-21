@@ -8,12 +8,12 @@
 <body>
 <div id="board"></div>
 <script>
-	const board = new Board(document.querySelector('#board'), {count: 6, size: 22, delay: 1})
+	const board = new Board(document.querySelector('#board'), {count: 12, size: 44, delay: 1000})
 	
 	function formatMessages(messages) {
 		let mymsgs = messages.messages.map(({ text }) => text);
 		board.updateMessages(mymsgs)
-		setTimeout(() => { getMessages(); }, 10000);
+		setTimeout(() => { getMessages(); }, 60000);
 	}
 
 	function getMessages() {
