@@ -14,7 +14,7 @@ app = Flask(__name__)
 @app.route("/")
 def main():
     #print(request.headers)
-    return render_template('ticker.html')
+    return render_template('flapper.html')
 
 def get_thruway():
     tree = ET.fromstring(requests.get("https://www.thruway.ny.gov/xml/netdata/dmsstatus.xml").content)
