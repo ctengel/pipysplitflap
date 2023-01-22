@@ -1,4 +1,3 @@
-import random
 import xml.etree.ElementTree as ET
 from flask import Flask, render_template
 import requests
@@ -7,12 +6,14 @@ import feedparser
 THRUWAY = True
 WEATHER = "NY"
 RSS = ['http://feeds.bbci.co.uk/news/rss.xml?edition=us',
-       'https://www.ncregister.com/feeds/general-news.xml']
+       'https://www.ncregister.com/feeds/general-news.xml']#,
+#       'http://rss.slashdot.org/Slashdot/slashdotMainatom']
 
 app = Flask(__name__)
 
 @app.route("/")
 def main():
+    #print(request.headers)
     return render_template('ticker.html')
 
 def get_thruway():
