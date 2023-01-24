@@ -4,7 +4,8 @@
 <head>
  <title>Splitflap</title>
  <link href="{{ url_for('static', filename='flapper.css') }}" rel="stylesheet" />
- <script src="{{ url_for('static', filename='jquery-3.6.3.min.js') }}"></script> 
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+ <!--<script src="{{ url_for('static', filename='jquery-3.6.3.min.js') }}"></script>-->
  <!--<script src="{{ url_for('static', filename='jquery.transform-0.9.3.min.js') }}"></script>-->
  <script src="{{ url_for('static', filename='jquery.flapper.js') }}"></script>
          <style type="text/css">
@@ -49,9 +50,13 @@
                <input class="display M" id="line11" />
 	</div>
 <script>
+	
+	function getTextToDisplay(msg) {
+		return msg.text;
+	}
 
 	function formatMessages(messages) {
-		let mymsgs = messages.messages.map(({ text }) => text);
+		const mymsgs = messages.messages.map(getTextToDisplay);
 		mymsgs.forEach((msg, idx) => {
 			$('#line' + idx).val(msg).change();
 		})
@@ -59,15 +64,15 @@
 	}
 
 	function getMessages() {
-		fetch('{{ url_for('render_board') }}').then((response) => response.json()).then((json) => formatMessages(json))
+		fetch('{{ url_for('render_board') }}').then((response) => response.json()).then((json) => formatMessages(json));
 	}
 
 	function startenUp() {
 		$('input.display').flapper({width: 44, align: 'left', chars_preset: 'alphanum', 'timing': 1000});
-		getMessages()
+		getMessages();
 	}
 
-	$(document).ready(startenUp())
+	$(document).ready(startenUp());
 </script>
 	</div>
 </body>
